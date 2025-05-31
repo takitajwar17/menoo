@@ -1,0 +1,32 @@
+export const mockAnalytics = {
+  today: {
+    totalOrders: 28,
+    orderChange: 12.5,
+    revenue: 18600,
+    revenueChange: 8.2,
+    averageOrderValue: 664,
+    aovChange: -2.1,
+    newCustomers: 8,
+    customerChange: 33.3,
+  },
+  week: {
+    totalOrders: 178,
+    orderChange: 15.6,
+    revenue: 124500,
+    revenueChange: 18.9,
+    averageOrderValue: 699,
+    aovChange: 3.2,
+    newCustomers: 42,
+    customerChange: 10.5,
+  },
+  month: {
+    totalOrders: 752,
+    orderChange: 22.8,
+    revenue: 520400,
+    revenueChange: 25.3,
+    averageOrderValue: 692,
+    aovChange: 5.1,
+    newCustomers: 156,
+    customerChange: 18.2,
+  },
+};
