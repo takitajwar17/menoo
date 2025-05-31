@@ -194,66 +194,53 @@ export default function TablesScreen() {
       />
       
       <View style={styles.content}>
-        {/* Redesigned header that combines stats with action buttons */}
-        <View style={styles.headerContainer}>
-          <View style={styles.headerTop}>
-            {/* Left side - Key Stats */}
-            <View style={styles.statsOverview}>
-              <View style={styles.mainStat}>
-                <Text style={styles.mainStatValue}>{totalTables}</Text>
-                <Text style={styles.mainStatLabel}>Total Tables</Text>
-              </View>
-              
-              <View style={styles.secondaryStats}>
-                <View style={styles.statRow}>
-                  <View style={styles.secondaryStat}>
-                    <View style={[styles.statIndicator, { backgroundColor: COLORS.success }]} />
-                    <Text style={styles.secondaryStatLabel}>Active:</Text>
-                    <Text style={styles.secondaryStatValue}>{activeTables}</Text>
-                  </View>
-                  
-                  <View style={styles.secondaryStat}>
-                    <View style={[styles.statIndicator, { backgroundColor: COLORS.primary }]} />
-                    <Text style={styles.secondaryStatLabel}>Occupied:</Text>
-                    <Text style={styles.secondaryStatValue}>{occupiedTables}</Text>
-                  </View>
-                </View>
-                
-                <View style={styles.statRow}>
-                  <View style={styles.secondaryStat}>
-                    <View style={[styles.statIndicator, { backgroundColor: COLORS.info }]} />
-                    <Text style={styles.secondaryStatLabel}>Capacity:</Text>
-                    <Text style={styles.secondaryStatValue}>{totalCapacity}</Text>
-                  </View>
-                </View>
-              </View>
+        {/* Simplified header that matches the image */}
+        <View style={styles.statsCard}>
+          <View style={styles.statsContent}>
+            <View style={styles.mainStatsColumn}>
+              <Text style={styles.totalTablesNumber}>{totalTables}</Text>
+              <Text style={styles.totalTablesText}>Total Tables</Text>
             </View>
             
-            {/* Right side - Actions */}
-            <View style={styles.headerActions}>
-              <TouchableOpacity 
-                style={styles.headerActionButton}
-                onPress={() => {
-                  // In a real app, this would open a form to add a new table
-                  Alert.alert("Add Table", "This would open a form to add a new table");
-                }}
-              >
-                <View style={[styles.actionIcon, { backgroundColor: COLORS.primaryLight }]}>
-                  <Plus size={20} color={COLORS.primary} />
-                </View>
-                <Text style={styles.actionText}>Add Table</Text>
-              </TouchableOpacity>
+            <View style={styles.detailedStats}>
+              <View style={styles.statItem}>
+                <View style={[styles.statDot, { backgroundColor: COLORS.success }]} />
+                <Text style={styles.statLabel}>Active:</Text>
+                <Text style={styles.statValue}>{activeTables}</Text>
+              </View>
               
-              <TouchableOpacity 
-                style={styles.headerActionButton}
-                onPress={() => router.push('/qr-generator')}
-              >
-                <View style={[styles.actionIcon, { backgroundColor: COLORS.secondaryLight }]}>
-                  <QrCode size={20} color={COLORS.secondary} />
-                </View>
-                <Text style={styles.actionText}>Generate QR</Text>
-              </TouchableOpacity>
+              <View style={styles.statItem}>
+                <View style={[styles.statDot, { backgroundColor: COLORS.primary }]} />
+                <Text style={styles.statLabel}>Occupied:</Text>
+                <Text style={styles.statValue}>{occupiedTables}</Text>
+              </View>
+              
+              <View style={styles.statItem}>
+                <View style={[styles.statDot, { backgroundColor: COLORS.info }]} />
+                <Text style={styles.statLabel}>Capacity:</Text>
+                <Text style={styles.statValue}>{totalCapacity}</Text>
+              </View>
             </View>
+          </View>
+          
+          <View style={styles.actionsContent}>
+            <TouchableOpacity 
+              style={styles.actionCircleButton}
+              onPress={() => {
+                Alert.alert("Add Table", "This would open a form to add a new table");
+              }}
+            >
+              <Plus size={24} color="#fff" />
+              <Text style={styles.actionCircleLabel}>Add Table</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.actionCircleButton, styles.qrButton]}
+              onPress={() => router.push('/qr-generator')}
+            >
+              <QrCode size={24} color="#fff" />
+              <Text style={styles.actionCircleLabel}>Generate QR</Text>
+            </TouchableOpacity>
           </View>
         </View>
         
@@ -324,8 +311,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  headerContainer: {
-    marginBottom: 20,
+  statsCard: {
+    flexDirection: 'row',
     backgroundColor: COLORS.white,
     borderRadius: 16,
     shadowColor: COLORS.black,
@@ -333,84 +320,82 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 4,
-    padding: 16,
+    marginBottom: 20,
+    overflow: 'hidden',
   },
-  headerTop: {
-    flexDirection: 'row',
-  },
-  statsOverview: {
+  statsContent: {
     flex: 3,
+    padding: 16,
     flexDirection: 'row',
+    borderRightWidth: 1,
+    borderRightColor: COLORS.lightGrey,
   },
-  mainStat: {
-    marginRight: 16,
+  mainStatsColumn: {
     justifyContent: 'center',
+    marginRight: 20,
   },
-  mainStatValue: {
+  totalTablesNumber: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 36,
+    fontSize: 48,
     color: COLORS.primary,
-    lineHeight: 42,
+    lineHeight: 56,
   },
-  mainStatLabel: {
+  totalTablesText: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 12,
+    fontSize: 13,
     color: COLORS.darkGrey,
   },
-  secondaryStats: {
+  detailedStats: {
     flex: 1,
     justifyContent: 'center',
   },
-  statRow: {
-    flexDirection: 'row',
-    marginBottom: 8,
-  },
-  secondaryStat: {
+  statItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 12,
+    marginBottom: 6,
   },
-  statIndicator: {
+  statDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    marginRight: 4,
+    marginRight: 6,
   },
-  secondaryStatLabel: {
+  statLabel: {
     fontFamily: 'Poppins-Medium',
     fontSize: 12,
     color: COLORS.darkGrey,
     marginRight: 4,
   },
-  secondaryStatValue: {
+  statValue: {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 12,
     color: COLORS.black,
   },
-  headerActions: {
+  actionsContent: {
     flex: 2,
-    justifyContent: 'space-between',
-    paddingLeft: 16,
-    borderLeftWidth: 1,
-    borderLeftColor: COLORS.lightGrey,
-  },
-  headerActionButton: {
-    flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
+    justifyContent: 'space-around',
+    padding: 16,
+    backgroundColor: COLORS.white,
   },
-  actionIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+  actionCircleButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 8,
+    marginBottom: 4,
   },
-  actionText: {
-    fontFamily: 'Poppins-SemiBold',
-    fontSize: 14,
+  qrButton: {
+    backgroundColor: COLORS.secondary,
+  },
+  actionCircleLabel: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 10,
     color: COLORS.darkGrey,
+    marginTop: 8,
+    textAlign: 'center',
   },
   filtersSection: {
     marginBottom: 16,
