@@ -42,6 +42,12 @@ export default function TablesScreen() {
   
   const locations = [...new Set(tables.map(table => table.location))];
   
+  // Calculate statistics
+  const totalTables = tables.length;
+  const activeTables = tables.filter(t => t.isActive).length;
+  const occupiedTables = tables.filter(t => t.status === 'occupied').length;
+  const totalCapacity = tables.reduce((sum, table) => sum + table.capacity, 0);
+
   const renderTableItem = ({ item }) => {
     // Define status colors
     const getStatusColor = (status: string) => {
@@ -188,51 +194,67 @@ export default function TablesScreen() {
       />
       
       <View style={styles.content}>
+        {/* Redesigned header that combines stats with action buttons */}
         <View style={styles.headerContainer}>
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{tables.length}</Text>
-              <Text style={styles.statLabel}>Total</Text>
+          <View style={styles.headerTop}>
+            {/* Left side - Key Stats */}
+            <View style={styles.statsOverview}>
+              <View style={styles.mainStat}>
+                <Text style={styles.mainStatValue}>{totalTables}</Text>
+                <Text style={styles.mainStatLabel}>Total Tables</Text>
+              </View>
+              
+              <View style={styles.secondaryStats}>
+                <View style={styles.statRow}>
+                  <View style={styles.secondaryStat}>
+                    <View style={[styles.statIndicator, { backgroundColor: COLORS.success }]} />
+                    <Text style={styles.secondaryStatLabel}>Active:</Text>
+                    <Text style={styles.secondaryStatValue}>{activeTables}</Text>
+                  </View>
+                  
+                  <View style={styles.secondaryStat}>
+                    <View style={[styles.statIndicator, { backgroundColor: COLORS.primary }]} />
+                    <Text style={styles.secondaryStatLabel}>Occupied:</Text>
+                    <Text style={styles.secondaryStatValue}>{occupiedTables}</Text>
+                  </View>
+                </View>
+                
+                <View style={styles.statRow}>
+                  <View style={styles.secondaryStat}>
+                    <View style={[styles.statIndicator, { backgroundColor: COLORS.info }]} />
+                    <Text style={styles.secondaryStatLabel}>Capacity:</Text>
+                    <Text style={styles.secondaryStatValue}>{totalCapacity}</Text>
+                  </View>
+                </View>
+              </View>
             </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>
-                {tables.filter(t => t.isActive).length}
-              </Text>
-              <Text style={styles.statLabel}>Active</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>
-                {tables.filter(t => t.status === 'occupied').length}
-              </Text>
-              <Text style={styles.statLabel}>Occupied</Text>
-            </View>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>
-                {tables.reduce((sum, table) => sum + table.capacity, 0)}
-              </Text>
-              <Text style={styles.statLabel}>Capacity</Text>
+            
+            {/* Right side - Actions */}
+            <View style={styles.headerActions}>
+              <TouchableOpacity 
+                style={styles.headerActionButton}
+                onPress={() => {
+                  // In a real app, this would open a form to add a new table
+                  Alert.alert("Add Table", "This would open a form to add a new table");
+                }}
+              >
+                <View style={[styles.actionIcon, { backgroundColor: COLORS.primaryLight }]}>
+                  <Plus size={20} color={COLORS.primary} />
+                </View>
+                <Text style={styles.actionText}>Add Table</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={styles.headerActionButton}
+                onPress={() => router.push('/qr-generator')}
+              >
+                <View style={[styles.actionIcon, { backgroundColor: COLORS.secondaryLight }]}>
+                  <QrCode size={20} color={COLORS.secondary} />
+                </View>
+                <Text style={styles.actionText}>Generate QR</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </View>
-
-        <View style={styles.actionContainer}>
-          <Button 
-            title="Add Table" 
-            icon={<Plus size={18} color={COLORS.white} />}
-            onPress={() => {
-              // In a real app, this would open a form to add a new table
-              Alert.alert("Add Table", "This would open a form to add a new table");
-            }}
-            style={styles.addButton}
-          />
-          
-          <Button 
-            title="Generate QR" 
-            icon={<QrCode size={18} color={COLORS.white} />}
-            onPress={() => router.push('/qr-generator')}
-            variant="secondary"
-            style={styles.generateButton}
-          />
         </View>
         
         <View style={styles.filtersSection}>
@@ -303,44 +325,92 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   headerContainer: {
-    marginBottom: 16,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    marginBottom: 20,
     backgroundColor: COLORS.white,
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
     shadowColor: COLORS.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowRadius: 8,
+    elevation: 4,
+    padding: 16,
   },
-  statItem: {
-    alignItems: 'center',
-    flex: 1,
+  headerTop: {
+    flexDirection: 'row',
   },
-  statValue: {
+  statsOverview: {
+    flex: 3,
+    flexDirection: 'row',
+  },
+  mainStat: {
+    marginRight: 16,
+    justifyContent: 'center',
+  },
+  mainStatValue: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 20,
+    fontSize: 36,
     color: COLORS.primary,
+    lineHeight: 42,
   },
-  statLabel: {
+  mainStatLabel: {
     fontFamily: 'Poppins-Medium',
     fontSize: 12,
     color: COLORS.darkGrey,
   },
-  actionContainer: {
-    flexDirection: 'row',
-    marginBottom: 16,
+  secondaryStats: {
+    flex: 1,
+    justifyContent: 'center',
   },
-  addButton: {
+  statRow: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  secondaryStat: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  statIndicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 4,
+  },
+  secondaryStatLabel: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: 12,
+    color: COLORS.darkGrey,
+    marginRight: 4,
+  },
+  secondaryStatValue: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 12,
+    color: COLORS.black,
+  },
+  headerActions: {
     flex: 2,
+    justifyContent: 'space-between',
+    paddingLeft: 16,
+    borderLeftWidth: 1,
+    borderLeftColor: COLORS.lightGrey,
+  },
+  headerActionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  actionIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 8,
   },
-  generateButton: {
-    flex: 1,
+  actionText: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+    color: COLORS.darkGrey,
   },
   filtersSection: {
     marginBottom: 16,
@@ -350,7 +420,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.black,
     marginBottom: 8,
-    marginTop: 8,
   },
   filterScrollView: {
     marginBottom: 8,
