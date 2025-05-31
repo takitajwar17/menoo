@@ -7,7 +7,6 @@ import { COLORS } from '@/constants/Colors';
 import Header from '@/components/ui/Header';
 import MenuCard from '@/components/menus/MenuCard';
 import { mockMenus } from '@/data/mockMenus';
-import Button from '@/components/ui/Button';
 
 export default function MenusScreen() {
   const router = useRouter();
@@ -15,18 +14,19 @@ export default function MenusScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Menus" />
+      <Header 
+        title="Menus" 
+        rightComponent={
+          <TouchableOpacity 
+            style={styles.actionCircleButton}
+            onPress={() => router.push('/menu/new')}
+          >
+            <Plus size={25} color="#fff" />
+          </TouchableOpacity>
+        }
+      />
       
       <View style={styles.content}>
-        <View style={styles.actionContainer}>
-          <Button 
-            title="Create Menu" 
-            icon={<Plus size={18} color={COLORS.white} />}
-            onPress={() => router.push('/menu/new')}
-            style={styles.createButton}
-          />
-        </View>
-        
         <Text style={styles.sectionTitle}>Your Menus</Text>
         
         <FlatList
@@ -55,12 +55,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  actionContainer: {
-    marginBottom: 24,
-  },
-  createButton: {
-    flex: 1,
-  },
   sectionTitle: {
     fontFamily: 'Poppins-SemiBold',
     fontSize: 18,
@@ -69,5 +63,18 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 24,
+  },
+  actionCircleButton: {
+    width: 35,
+    height: 35,
+    borderRadius: 17.5,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 1,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
 });

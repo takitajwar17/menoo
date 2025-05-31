@@ -229,14 +229,14 @@ export default function TablesScreen() {
                 Alert.alert("Add Table", "This would open a form to add a new table");
               }}
             >
-              <Plus size={30} color="#fff" />
+              <Plus size={25} color="#fff" />
             </TouchableOpacity>
             
             <TouchableOpacity 
               style={[styles.actionCircleButton, styles.qrButton]}
               onPress={() => router.push('/qr-generator')}
             >
-              <QrCode size={30} color="#fff" />
+              <QrCode size={25} color="#fff" />
             </TouchableOpacity>
           </View>
         </View>
@@ -375,9 +375,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   actionCircleButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 35,
+    height: 35,
+    borderRadius: 17.5,
     backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -532,27 +532,34 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     backgroundColor: COLORS.primary,
-    paddingVertical: 10,
+    paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   disabledButton: {
     backgroundColor: COLORS.lightGrey,
   },
   actionButtonText: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 14,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 15,
     color: COLORS.white,
   },
   iconActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 8,
   },
   iconButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 8,
+    backgroundColor: COLORS.lightGrey,
+    borderRadius: 8,
   },
   statusDot: {
     width: 8,
@@ -564,7 +571,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontSize: 12,
     color: COLORS.darkGrey,
-    marginRight: 8,
   },
   emptyContainer: {
     alignItems: 'center',

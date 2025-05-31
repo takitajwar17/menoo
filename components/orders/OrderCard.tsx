@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { Clock, ChevronsRight } from 'lucide-react-native';
 import { COLORS } from '@/constants/Colors';
 
@@ -54,7 +54,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <View>
           <Text style={styles.orderId}>Order #{order.id}</Text>
@@ -105,7 +105,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
           <ChevronsRight size={16} color={COLORS.primary} />
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 
