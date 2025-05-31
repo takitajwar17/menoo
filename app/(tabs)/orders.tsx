@@ -200,7 +200,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    height: '70%',
+    height: '80%',
+    position: 'relative',
   },
   overlayHeader: {
     flexDirection: 'row',
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
   overlayBody: {
     flex: 1,
     padding: 16,
-    paddingBottom: 16,
+    paddingBottom: 80,
   },
   orderInfo: {
     marginBottom: 24,
@@ -290,7 +291,12 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
   },
   overlayFooter: {
-    padding: 8,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 16,
+    backgroundColor: COLORS.white,
     borderTopWidth: 1,
     borderTopColor: COLORS.lightGrey,
   },
