@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, Stack } from 'expo-router';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft, X, Scan } from 'lucide-react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { COLORS } from '@/constants/Colors';
 
@@ -10,6 +10,7 @@ export default function QRScannerScreen() {
   const router = useRouter();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
+  const [flashOn, setFlashOn] = useState(false);
 
   useEffect(() => {
     if (!permission?.granted) {
@@ -18,7 +19,6 @@ export default function QRScannerScreen() {
   }, [permission]);
 
   if (!permission) {
-    // Camera permissions are still loading
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Requesting camera permission...</Text>
@@ -27,23 +27,21 @@ export default function QRScannerScreen() {
   }
 
   if (!permission.granted) {
-    // Camera permissions are not granted yet
     return (
       <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
         <Stack.Screen 
           options={{
-            headerShown: true,
-            headerTitle: 'QR Scanner',
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => router.back()}>
-                <ArrowLeft size={24} color={COLORS.black} />
-              </TouchableOpacity>
-            ),
+            headerShown: false,
           }}
         />
         
         <View style={styles.permissionContainer}>
-          <Text style={styles.permissionText}>We need your permission to use the camera</Text>
+          <Image 
+            source={{ uri: "https://images.pexels.com/photos/4144179/pexels-photo-4144179.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" }}
+            style={styles.permissionImage}
+          />
+          <Text style={styles.permissionTitle}>Camera Access Needed</Text>
+          <Text style={styles.permissionText}>We need your permission to scan QR codes</Text>
           <TouchableOpacity style={styles.permissionButton} onPress={requestPermission}>
             <Text style={styles.permissionButtonText}>Grant Permission</Text>
           </TouchableOpacity>
@@ -55,52 +53,67 @@ export default function QRScannerScreen() {
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     
-    // Process the QR code data
-    // Normally this would navigate to a menu or table-specific order screen
-    alert(`QR code with type ${type} and data ${data} has been scanned!`);
-    
-    // In a real app, we would parse the data and navigate to the appropriate screen
-    router.back();
+    // Parse the QR code data
+    // In a real app, we would navigate to the appropriate screen
+    setTimeout(() => {
+      Alert.alert(
+        "QR Code Scanned",
+        `${data}`,
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Open", onPress: () => router.back() }
+        ]
+      );
+    }, 500);
   };
 
   return (
     <View style={styles.container}>
       <Stack.Screen 
         options={{
-          headerShown: true,
-          headerTitle: 'QR Scanner',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()}>
-              <ArrowLeft size={24} color="#FFF" />
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: 'transparent',
-          },
-          headerTitleStyle: {
-            color: '#FFF',
-          },
-          headerTransparent: true,
+          headerShown: false,
         }}
       />
 
       <CameraView
         style={styles.camera}
         onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+        barCodeScannerSettings={{
+          barCodeTypes: ['qr'],
+        }}
+        flashMode={flashOn ? 'on' : 'off'}
       >
         <View style={styles.overlay}>
-          <View style={styles.scanBox} />
+          <SafeAreaView style={styles.topControls}>
+            <TouchableOpacity 
+              style={styles.circleButton} 
+              onPress={() => router.back()}
+            >
+              <X size={24} color="#FFF" />
+            </TouchableOpacity>
+          </SafeAreaView>
+          
+          <View style={styles.scanFrame}>
+            <View style={styles.cornerTopLeft} />
+            <View style={styles.cornerTopRight} />
+            <View style={styles.cornerBottomLeft} />
+            <View style={styles.cornerBottomRight} />
+          </View>
+          
+          <View style={styles.bottomControls}>
+            <Text style={styles.scanText}>
+              {scanned ? 'QR code detected!' : 'Align QR code within the frame'}
+            </Text>
+            
+            <TouchableOpacity
+              style={styles.scanAgainButton}
+              onPress={() => setScanned(false)}
+              disabled={!scanned}
+            >
+              <Scan size={24} color={scanned ? COLORS.primary : "rgba(255,255,255,0.6)"} />
+            </TouchableOpacity>
+          </View>
         </View>
-        
-        <View style={styles.guideContainer}>
-          <Text style={styles.guideText}>Align the QR code within the frame</Text>
-        </View>
-        
-        {scanned && (
-          <TouchableOpacity style={styles.scanAgainButton} onPress={() => setScanned(false)}>
-            <Text style={styles.scanAgainText}>Scan Again</Text>
-          </TouchableOpacity>
-        )}
       </CameraView>
     </View>
   );
@@ -121,20 +134,35 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.white,
     padding: 24,
   },
-  permissionText: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 18,
+  permissionImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    marginBottom: 24,
+  },
+  permissionTitle: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 22,
     color: COLORS.black,
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 12,
+  },
+  permissionText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 16,
+    color: COLORS.darkGrey,
+    textAlign: 'center',
+    marginBottom: 32,
   },
   permissionButton: {
     backgroundColor: COLORS.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    alignItems: 'center',
   },
   permissionButtonText: {
     fontFamily: 'Poppins-Medium',
@@ -146,44 +174,87 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  topControls: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    padding: 16,
+  },
+  circleButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  scanBox: {
+  scanFrame: {
     width: 250,
     height: 250,
-    borderWidth: 2,
+    position: 'relative',
+  },
+  cornerTopLeft: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 40,
+    height: 40,
+    borderTopWidth: 3,
+    borderLeftWidth: 3,
     borderColor: COLORS.white,
-    backgroundColor: 'transparent',
   },
-  guideContainer: {
+  cornerTopRight: {
     position: 'absolute',
-    bottom: 120,
-    left: 0,
+    top: 0,
     right: 0,
-    alignItems: 'center',
+    width: 40,
+    height: 40,
+    borderTopWidth: 3,
+    borderRightWidth: 3,
+    borderColor: COLORS.white,
   },
-  guideText: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: 16,
-    color: COLORS.white,
-    textAlign: 'center',
-  },
-  scanAgainButton: {
+  cornerBottomLeft: {
     position: 'absolute',
-    bottom: 60,
+    bottom: 0,
     left: 0,
-    right: 0,
-    backgroundColor: COLORS.primary,
-    paddingVertical: 12,
-    marginHorizontal: 60,
-    borderRadius: 8,
-    alignItems: 'center',
+    width: 40,
+    height: 40,
+    borderBottomWidth: 3,
+    borderLeftWidth: 3,
+    borderColor: COLORS.white,
   },
-  scanAgainText: {
+  cornerBottomRight: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 40,
+    height: 40,
+    borderBottomWidth: 3,
+    borderRightWidth: 3,
+    borderColor: COLORS.white,
+  },
+  bottomControls: {
+    width: '100%',
+    alignItems: 'center',
+    paddingBottom: 60,
+  },
+  scanText: {
     fontFamily: 'Poppins-Medium',
     fontSize: 16,
     color: COLORS.white,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  scanAgainButton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
