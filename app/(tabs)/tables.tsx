@@ -129,6 +129,7 @@ export default function TablesScreen() {
         <View style={styles.tableActions}>
           <TouchableOpacity 
             style={[styles.actionButton, !item.isActive && styles.disabledButton]}
+            onPress={() => {
               if (item.isActive) {
                 Alert.alert(
                   "Update Table Status",
@@ -141,9 +142,9 @@ export default function TablesScreen() {
                   ]
                 );
               }
-            onPress={() => Alert.alert("Add Table", "This would open a form to add a new table")}
+            }}
           >
-            <Plus size={16} color="#fff" />
+            <Text style={styles.actionButtonText}>Update Status</Text>
           </TouchableOpacity>
           
           <View style={styles.iconActions}>
