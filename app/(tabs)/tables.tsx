@@ -231,7 +231,6 @@ export default function TablesScreen() {
               }}
             >
               <Plus size={24} color="#fff" />
-              <Text style={styles.actionCircleLabel}>Add Table</Text>
             </TouchableOpacity>
             
             <TouchableOpacity 
@@ -239,7 +238,6 @@ export default function TablesScreen() {
               onPress={() => router.push('/qr-generator')}
             >
               <QrCode size={24} color="#fff" />
-              <Text style={styles.actionCircleLabel}>Generate QR</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -385,17 +383,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
   },
   qrButton: {
     backgroundColor: COLORS.secondary,
-  },
-  actionCircleLabel: {
-    fontFamily: 'Poppins-Medium',
-    fontSize: 10,
-    color: COLORS.darkGrey,
-    marginTop: 8,
-    textAlign: 'center',
   },
   filtersSection: {
     marginBottom: 16,
