@@ -229,14 +229,14 @@ export default function TablesScreen() {
                 Alert.alert("Add Table", "This would open a form to add a new table");
               }}
             >
-              <Plus size={20} color="#fff" />
+              <Plus size={30} color="#fff" />
             </TouchableOpacity>
             
             <TouchableOpacity 
               style={[styles.actionCircleButton, styles.qrButton]}
               onPress={() => router.push('/qr-generator')}
             >
-              <QrCode size={20} color="#fff" />
+              <QrCode size={30} color="#fff" />
             </TouchableOpacity>
           </View>
         </View>
