@@ -230,14 +230,14 @@ export default function TablesScreen() {
                 Alert.alert("Add Table", "This would open a form to add a new table");
               }}
             >
-              <Plus size={24} color="#fff" />
+              <Plus size={20} color="#fff" />
             </TouchableOpacity>
             
             <TouchableOpacity 
               style={[styles.actionCircleButton, styles.qrButton]}
               onPress={() => router.push('/qr-generator')}
             >
-              <QrCode size={24} color="#fff" />
+              <QrCode size={20} color="#fff" />
             </TouchableOpacity>
           </View>
         </View>
@@ -370,19 +370,24 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   actionsContent: {
-    flex: 2,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
-    padding: 16,
+    paddingVertical: 15,
     backgroundColor: COLORS.white,
   },
   actionCircleButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 45,
+    height: 45,
+    borderRadius: 23,
     backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    elevation: 2,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   qrButton: {
     backgroundColor: COLORS.secondary,
