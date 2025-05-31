@@ -129,7 +129,6 @@ export default function TablesScreen() {
         <View style={styles.tableActions}>
           <TouchableOpacity 
             style={[styles.actionButton, !item.isActive && styles.disabledButton]}
-            onPress={() => {
               if (item.isActive) {
                 Alert.alert(
                   "Update Table Status",
@@ -142,10 +141,9 @@ export default function TablesScreen() {
                   ]
                 );
               }
-            }}
-            disabled={!item.isActive}
+            onPress={() => Alert.alert("Add Table", "This would open a form to add a new table")}
           >
-            <Text style={styles.actionButtonText}>Update Status</Text>
+            <Plus size={16} color="#fff" />
           </TouchableOpacity>
           
           <View style={styles.iconActions}>
@@ -188,7 +186,7 @@ export default function TablesScreen() {
         title="Tables" 
         rightComponent={
           <TouchableOpacity style={styles.filterButton}>
-            <Filter size={20} color={COLORS.darkGrey} />
+            <QrCode size={16} color="#fff" />
           </TouchableOpacity>
         }
       />
@@ -372,14 +370,14 @@ const styles = StyleSheet.create({
   actionsContent: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-around',
-    paddingVertical: 15,
+    justifyContent: 'center',
+    gap: 8,
     backgroundColor: COLORS.white,
   },
   actionCircleButton: {
-    width: 45,
-    height: 45,
-    borderRadius: 23,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
